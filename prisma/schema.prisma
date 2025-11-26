@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(uuid())
+  name           String?
+  email          String?  @unique
+  emailVerified  DateTime?
+  image          String?
+
+  // SENHA SEGURA
+  hashedPassword String?     
+
+  // ROLES (Admin, gestor, financeiro, professor, responsável)
+  role           String   @default("RESPONSAVEL")
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userResponsavel UserResponsavel?
+}
+
+model UserResponsavel {
+  id            String     @id @default(uuid())
+  userId        String
+  responsavelId String
+
+  user          User        @relation(fields: [userId], references: [id])
+  responsavel   Responsavel @relation(fields: [responsavelId], references: [id])
+
+  @@unique([userId])
+  @@index([responsavelId])
+}
+
+model Responsavel {
+  id              String             @id @default(uuid())
+  nome            String
+  email           String             @unique
+  telefone        String?
+  cpf             String?            @unique
+  endereco        String?
+  asaasCustomerId String?
+
+  alunos          Aluno[]
+  pagamentos      Pagamento[]
+  userLinks       UserResponsavel[]
+
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model Aluno {
+  id            String       @id @default(uuid())
+  nome          String
+  serie         String
+  nascimento    DateTime?
+  responsavelId String
+
+  responsavel   Responsavel  @relation(fields: [responsavelId], references: [id])
+  pagamentos    Pagamento[]
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([responsavelId])
+}
+
+model Pagamento {
+  id             String      @id @default(uuid())
+  descricao      String
+  valor          Decimal      @db.Numeric(10,2)
+  status         String
+  vencimento     DateTime
+
+  alunoId        String
+  responsavelId  String
+
+  aluno          Aluno        @relation(fields: [alunoId], references: [id])
+  responsavel    Responsavel  @relation(fields: [responsavelId], references: [id])
+
+  asaasPaymentId String?
+  pixQrCode      String?
+  pixPayload     String?
+  boletoUrl      String?
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([status])
+  @@index([vencimento])
+  @@index([responsavelId])
+  @@index([alunoId])
+}
+
+model Mensagem {
+  id          String   @id @default(uuid())
+  titulo      String
+  conteudo    String
+  tipoEnvio   String
+  destino     String
+  createdAt   DateTime @default(now())
+}
+
+model PreMatricula {
+  id               String    @id @default(uuid())
+  alunoNome        String
+  alunoNascimento  DateTime?
+  alunoSerie       String?
+  respNome         String
+  respEmail        String
+  respTelefone     String?
+  respCpf          String?
+  respEndereco     String?
+  status           String    @default("novo")
+  createdAt        DateTime  @default(now())
+
+  @@index([respEmail])
+  @@index([status])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user              User    @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  identifier String
+  token      String @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}

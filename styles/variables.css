@@ -1,0 +1,31 @@
+:root {
+  /* ==== CORES PRINCIPAIS (PALETA SEA) ==== */
+  --blue-900: #031d26; /* mais escuro */
+  --blue-800: #163d4b;
+  --blue-700: #1f6a7e;
+  --blue-600: #5c94a3;
+  --blue-500: #83bcc5;
+  --blue-400: #a9d5e8; /* mais claro */
+
+  /* ==== CORES DO TEMA ==== */
+  --primary: var(--blue-700);
+  --primary-hover: var(--blue-800);
+
+  --secondary: var(--blue-500);
+  --secondary-hover: var(--blue-600);
+
+  /* ==== FUNDO E TEXTO ==== */
+  --background: #ffffff;         /* fundo branco */
+  --text: #0f172a;               /* quase preto, legibilidade */
+  --text-soft: #334155;          /* cinza escuro suave */
+
+  /* ==== BORDAS E SOMBRAS ==== */
+  --border-color: #e2e8f0;
+  --radius: 8px;
+
+  /* ==== ESPAÇAMENTOS ==== */
+  --gap: 12px;
+  --padding: 16px;
+}
+
+/* Sem dark mode porque você pediu fundo claro sempre */
