@@ -1,62 +1,31 @@
-// components/ui/card.tsx
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: boolean;
+}
 
-export function Card({ className, ...props }: CardProps) {
+/**
+ * Textarea base profissional:
+ * - Visual consistente com Input
+ * - Suporte a estado de erro
+ * - Acessibilidade via aria-invalid
+ */
+export function Textarea({ className, error, ...props }: TextareaProps) {
   return (
-    <div
+    <textarea
       className={cn(
-        "rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-sm shadow-black/40",
+        "block w-full rounded-lg border bg-slate-900 px-3 py-2 text-sm text-slate-100 shadow-sm",
+        "placeholder:text-slate-500",
+        "focus:outline-none focus:ring-1 resize-none",
+        error
+          ? "border-red-500 focus:ring-red-500"
+          : "border-slate-700 focus:border-yellow-500 focus:ring-yellow-500",
+        "disabled:cursor-not-allowed disabled:opacity-60",
         className
       )}
-      {...props}
-    />
-  );
-}
-
-export function CardHeader({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("mb-3 flex items-center justify-between gap-2", className)}
-      {...props}
-    />
-  );
-}
-
-export function CardTitle({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h3
-      className={cn("text-base font-semibold text-slate-100", className)}
-      {...props}
-    />
-  );
-}
-
-export function CardContent({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={cn("text-sm text-slate-300", className)} {...props} />
-  );
-}
-
-export function CardFooter({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("mt-4 flex items-center justify-end gap-2", className)}
+      aria-invalid={error || undefined}
       {...props}
     />
   );

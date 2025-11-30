@@ -6,11 +6,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/login/page.js"
-    ],
     "/painel/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -21,40 +16,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/painel/dashboard/page.js"
     ],
-    "/painel/financeiro/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/painel/financeiro/page.js"
+      "static/chunks/app/page.js"
     ],
     "/painel/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/painel/page.js"
-    ],
-    "/painel/alunos/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/painel/alunos/page.js"
-    ],
-    "/painel/responsavel/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/painel/responsavel/page.js"
-    ],
-    "/painel/mensagens/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/painel/mensagens/page.js"
-    ],
-    "/painel/admin/users/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/painel/admin/users/page.js"
-    ],
-    "/not-found": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
     ]
   }
 }

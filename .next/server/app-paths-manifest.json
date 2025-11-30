@@ -1,10 +1,4 @@
 {
-  "/not-found": "app/not-found.js",
-  "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/api/responsaveis/route": "app/api/responsaveis/route.js",
-  "/painel/page": "app/painel/page.js",
-  "/painel/alunos/page": "app/painel/alunos/page.js",
-  "/painel/admin/users/page": "app/painel/admin/users/page.js",
-  "/painel/responsavel/page": "app/painel/responsavel/page.js",
+  "/page": "app/page.js",
   "/painel/dashboard/page": "app/painel/dashboard/page.js"
 }

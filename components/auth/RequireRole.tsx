@@ -11,40 +11,47 @@ export default function RequireRole({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [role, setRole] = useState<string | null>(null);
 
-  // Busca o role REAL via cookie (API /auth/me)
+  const [role, setRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function load() {
       try {
-        const r = await fetch("/api/auth/me");
-        const data = await r.json();
+        const res = await fetch("/api/auth/me", {
+          cache: "no-store",
+        });
+
+        const data = await res.json();
 
         if (!data.logado) {
           router.replace("/login");
           return;
         }
 
-        setRole(data.role); // "ADMIN", "GESTOR", etc.
-      } catch (err) {
+        setRole(data.role);
+      } catch (error) {
         router.replace("/login");
+      } finally {
+        setLoading(false);
       }
     }
 
     load();
   }, [router]);
 
-  // Enquanto busca
-  if (!role) return null;
+  // Enquanto carrega, não renderiza nada (evita flicker)
+  if (loading) return null;
 
-  // Normaliza case
+  // Normaliza role
   const normalizedAllowed = allowed.map((r) => r.toUpperCase());
 
-  // Verifica permissão
-  if (!normalizedAllowed.includes(role.toUpperCase())) {
+  // Sem permissão
+  if (!role || !normalizedAllowed.includes(role.toUpperCase())) {
     router.replace("/painel/dashboard");
     return null;
   }
 
+  // Autorizado
   return <>{children}</>;
 }
