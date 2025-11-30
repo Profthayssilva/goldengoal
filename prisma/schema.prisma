@@ -8,89 +8,91 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  name           String?
-  email          String?  @unique
-  emailVerified  DateTime?
-  image          String?
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
 
   // SENHA SEGURA
-  hashedPassword String?     
+  hashedPassword String?
 
   // ROLES (Admin, gestor, financeiro, professor, responsável)
-  role           String   @default("RESPONSAVEL")
+  role String @default("RESPONSAVEL")
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   userResponsavel UserResponsavel?
+  Account         Account[]
+  Session         Session[]
 }
 
 model UserResponsavel {
-  id            String     @id @default(uuid())
+  id            String @id @default(uuid())
   userId        String
   responsavelId String
 
-  user          User        @relation(fields: [userId], references: [id])
-  responsavel   Responsavel @relation(fields: [responsavelId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
+  responsavel Responsavel @relation(fields: [responsavelId], references: [id])
 
   @@unique([userId])
   @@index([responsavelId])
 }
 
 model Responsavel {
-  id              String             @id @default(uuid())
+  id              String  @id @default(uuid())
   nome            String
-  email           String             @unique
+  email           String  @unique
   telefone        String?
-  cpf             String?            @unique
+  cpf             String? @unique
   endereco        String?
   asaasCustomerId String?
 
-  alunos          Aluno[]
-  pagamentos      Pagamento[]
-  userLinks       UserResponsavel[]
+  alunos     Aluno[]
+  pagamentos Pagamento[]
+  userLinks  UserResponsavel[]
 
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Aluno {
-  id            String       @id @default(uuid())
+  id            String    @id @default(uuid())
   nome          String
   serie         String
   nascimento    DateTime?
   responsavelId String
 
-  responsavel   Responsavel  @relation(fields: [responsavelId], references: [id])
-  pagamentos    Pagamento[]
+  responsavel Responsavel @relation(fields: [responsavelId], references: [id])
+  pagamentos  Pagamento[]
 
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([responsavelId])
 }
 
 model Pagamento {
-  id             String      @id @default(uuid())
-  descricao      String
-  valor          Decimal      @db.Numeric(10,2)
-  status         String
-  vencimento     DateTime
+  id         String   @id @default(uuid())
+  descricao  String
+  valor      Decimal  @db.Decimal(10, 2)
+  status     String
+  vencimento DateTime
 
-  alunoId        String
-  responsavelId  String
+  alunoId       String
+  responsavelId String
 
-  aluno          Aluno        @relation(fields: [alunoId], references: [id])
-  responsavel    Responsavel  @relation(fields: [responsavelId], references: [id])
+  aluno       Aluno       @relation(fields: [alunoId], references: [id])
+  responsavel Responsavel @relation(fields: [responsavelId], references: [id])
 
   asaasPaymentId String?
   pixQrCode      String?
   pixPayload     String?
   boletoUrl      String?
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([status])
   @@index([vencimento])
@@ -99,26 +101,26 @@ model Pagamento {
 }
 
 model Mensagem {
-  id          String   @id @default(uuid())
-  titulo      String
-  conteudo    String
-  tipoEnvio   String
-  destino     String
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  titulo    String
+  conteudo  String
+  tipoEnvio String
+  destino   String
+  createdAt DateTime @default(now())
 }
 
 model PreMatricula {
-  id               String    @id @default(uuid())
-  alunoNome        String
-  alunoNascimento  DateTime?
-  alunoSerie       String?
-  respNome         String
-  respEmail        String
-  respTelefone     String?
-  respCpf          String?
-  respEndereco     String?
-  status           String    @default("novo")
-  createdAt        DateTime  @default(now())
+  id              String    @id @default(uuid())
+  alunoNome       String
+  alunoNascimento DateTime?
+  alunoSerie      String?
+  respNome        String
+  respEmail       String
+  respTelefone    String?
+  respCpf         String?
+  respEndereco    String?
+  status          String    @default("novo")
+  createdAt       DateTime  @default(now())
 
   @@index([respEmail])
   @@index([status])
@@ -138,7 +140,7 @@ model Account {
   id_token          String?
   session_state     String?
 
-  user              User    @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
 }
@@ -149,12 +151,12 @@ model Session {
   userId       String
   expires      DateTime
 
-  user         User     @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model VerificationToken {
   identifier String
-  token      String @unique
+  token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
