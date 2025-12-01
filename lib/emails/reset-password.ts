@@ -1,7 +1,7 @@
-import { sendEmail } from "./sendEmail";
+import { sendMail } from "@/lib/mail";
 
 export async function sendResetPasswordEmail(to: string, token: string) {
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/${token}`;
+  const url = `${process.env.APP_URL}/reset/${token}`;
 
   const html = `
     <p>Você solicitou a redefinição de senha.</p>
@@ -10,5 +10,9 @@ export async function sendResetPasswordEmail(to: string, token: string) {
     <p>Se você não solicitou, ignore este e-mail.</p>
   `;
 
-  await sendEmail(to, "Redefinição de senha", html);
+  await sendMail({
+    to,
+    subject: "Redefinição de senha",
+    html,
+  });
 }
